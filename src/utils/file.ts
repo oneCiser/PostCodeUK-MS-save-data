@@ -1,24 +1,52 @@
 import fs from "fs"
 
-
-export const csv2json = (file: string, sep: string = ",", header: boolean = true) => {
-    const newLine = /\r?\n/;
-    const lines = file.split(newLine);
-    const headers = lines[0].split(sep);
-    const result = [];
-    for (let i = 1; i < lines.length; i++) {
-        const obj: Record<string,any> = {};
-        const currentline = lines[i].split(sep);
-        for (let j = 0; j < headers.length; j++) {
-            const header: string = headers[j];
-            obj[header] = typeFormatter(currentline[j]);
+/**
+ * 
+ * @param {String} file - The csv file
+ * @param {String} sep - The separator 
+ * @param {boolean} header - If the file has a header 
+ * @returns {object} - The json object
+ * @throws {Error} - If the csv file is not valid, indicating the error and line number
+ */
+export const csv2json = (file: string, sep: string = ",", header: boolean = true, headers:string[] = []) => {
+    try {
+        const newLine = /\r?\n/;
+        const lines = file.split(newLine);
+        let localHeaders = headers;
+        let startLine = 0;
+        if (header) {
+            localHeaders = lines[0].split(sep);
+            startLine = 1;
         }
-        result.push(obj);
+        
+        const result = [];
+        for (let i = startLine; i < lines.length; i++) {
+            const obj: Record<string,any> = {};
+            const currentline = lines[i].split(sep);
+            if (currentline.length !== localHeaders.length) throw new Error(`The number of columns in line ${i} is not equal to the number of columns in the header`);
+            for (let j = 0; j < localHeaders.length; j++) {
+                if(!currentline[j]) throw new Error(`Line ${i} is missing value for ${headers[j]}`);
+                const header: string = localHeaders[j];
+                obj[header] = typeFormatter(currentline[j]);
+            }
+            result.push(obj);
+        }
+        return result;
+    } catch (error) {
+        if(error instanceof Error) {
+            throw new Error(error.message || "The csv file is not valid");
+        }
+        
     }
-    return result;
+
 }
 
-const typeFormatter = (value: any) => {
+/**
+ * 
+ * @param {any} value - the value to be formatted 
+ * @returns {string | number | boolean} - the formatted value
+ */
+const typeFormatter = (value: any): string | number | boolean => {
     const isNumber = !isNaN(value);
     if (isNumber) return Number(value);
     if(value === "true" || value === "false"){

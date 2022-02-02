@@ -26,10 +26,8 @@ class FileController {
       const fileString = req.file.buffer.toString();
       console.log(csv2json(fileString));
       res.json(csv2json(fileString));
-    } catch (error) {
-      if(error instanceof HttpException) {
-        return next(new HttpException(error.status || 500, error.message));
-      }
+    } catch (error: any) {
+      return next(new HttpException(error.status || 500, error.message));
     }
   }
 
