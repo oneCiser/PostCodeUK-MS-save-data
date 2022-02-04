@@ -24,8 +24,10 @@ class FileController {
     try {
       if(!req.file) throw new HttpException(400, 'No file uploaded');
       const fileString = req.file.buffer.toString();
-      console.log(csv2json(fileString));
-      res.json(csv2json(fileString));
+      const jsonFile = csv2json(fileString);
+      res.json({
+        status: 200
+      });
     } catch (error: any) {
       return next(new HttpException(error.status || 500, error.message));
     }

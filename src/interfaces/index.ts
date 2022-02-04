@@ -1,10 +1,7 @@
-import ICrud from './ICrud';
-import IUser from './IUser';
-import IRoute from './IRoute';
+import IPoint from "./IPoint";
+import IPostCode from "./IPostCode";
 
 export {
-  // eslint-disable-next-line import/prefer-default-export
-  ICrud,
-  IUser,
-  IRoute,
-};
+    IPoint,
+    IPostCode
+}
