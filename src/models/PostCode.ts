@@ -19,7 +19,7 @@ const PostCodeSchema: Schema<IPostCode> = new Schema({
     points: { type: [pointSchema], required: false, default: [] },
     location: {
         type: pointSchema,
-        index: '2dsphere' // Create a special 2dsphere index on `City.location`
+        index: '2dsphere'
       }
 });
 

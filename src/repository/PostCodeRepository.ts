@@ -55,8 +55,23 @@ class PostCodeRepositoy {
         })
     }
 
+    /**
+     * @description find a postcode by point
+     * @param {IPoint} point point to find
+     * @returns {Promise<IPostCode | null>} return a PostCode if exist or null
+     * @memberof PostCodeRepositoy
+     */
     findNearestPostCodeByPoint(point: IPoint): Promise<IPostCode | null> {
-        
+        return new Promise<IPostCode | null>((resolve, reject) => {
+            PostCode.findOne({
+                location:{
+                    $near: point.coordinates
+                }
+            })
+            .then((postcode: IPostCode | null) => resolve(postcode))
+            .catch(err => reject(err));
+        });
+
     }
 
 }
