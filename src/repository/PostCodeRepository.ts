@@ -1,5 +1,5 @@
 
-import {IPostCode} from '../interfaces';
+import {IPostCode, IPoint} from '../interfaces';
 import {PostCode} from '../models';
 /**
  *
@@ -9,7 +9,12 @@ import {PostCode} from '../models';
  */
 class PostCodeRepositoy {
 
-
+    /**
+     * @description create a new postcode
+     * @param {IPostCode} postcode 
+     * @returns {Promise<IPostCode>} a create PostCode
+     * @memberof PostCodeRepositoy
+     */
     create(postcode: IPostCode): Promise<IPostCode> {
         return new Promise<IPostCode>((resolve, reject) => {
             postcode.save()
@@ -18,6 +23,12 @@ class PostCodeRepositoy {
         })
     }
 
+    /**
+     * @description update a postcode
+     * @param {IPostCode} postcode 
+     * @returns {Promise<IPostCode>} a update PostCode
+     * @memberof PostCodeRepositoy
+     */
     async update(postcode: IPostCode): Promise<IPostCode> {
         return new Promise<IPostCode>(async (resolve, reject) => {
             try {
@@ -29,6 +40,13 @@ class PostCodeRepositoy {
         });
     }
 
+
+    /**
+     * @description find a postcode by id
+     * @param {string} id - The id to find
+     * @returns {Promise<IPostCode | null>} return a PostCode if exist or null
+     * @memberof PostCodeRepositoy
+     */
     getById(id: string): Promise<IPostCode | null> {
         return new Promise<IPostCode | null>((resolve, reject) => {
             PostCode.findById(id)
@@ -37,4 +55,10 @@ class PostCodeRepositoy {
         })
     }
 
+    findNearestPostCodeByPoint(point: IPoint): Promise<IPostCode | null> {
+        
+    }
+
 }
+
+export default new PostCodeRepositoy();

@@ -4,7 +4,7 @@
  * @interface IPoint
  */
  interface IPoint{
-    lat: number,
-    lon: number
+    type: string,
+    coordinates: number[]
 }
 export default  IPoint;
