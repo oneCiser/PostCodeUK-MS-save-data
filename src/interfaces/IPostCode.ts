@@ -11,6 +11,7 @@ interface IPostCode extends Document{
     postcode: String,
     data: any
     points: IPoint[],
-    location: IPoint
+    location: IPoint,
+    nearestRadius: number
 }
 export default  IPostCode;

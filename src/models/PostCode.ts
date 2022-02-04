@@ -20,7 +20,8 @@ const PostCodeSchema: Schema<IPostCode> = new Schema({
     location: {
         type: pointSchema,
         index: '2dsphere'
-      }
+      },
+    nearestRadius: { type: Number, required: false, default: 0 }
 });
 
 const PostCode: Model<IPostCode> = mongoose.model('PostCode', PostCodeSchema);

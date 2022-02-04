@@ -56,22 +56,57 @@ class PostCodeRepositoy {
     }
 
     /**
-     * @description find a postcode by point
+     * @description find nearest a postcode by point in a distance radius lest or equal to nearestRadius
      * @param {IPoint} point point to find
      * @returns {Promise<IPostCode | null>} return a PostCode if exist or null
      * @memberof PostCodeRepositoy
      */
     findNearestPostCodeByPoint(point: IPoint): Promise<IPostCode | null> {
+
         return new Promise<IPostCode | null>((resolve, reject) => {
-            PostCode.findOne({
-                location:{
-                    $near: point.coordinates
+            PostCode.aggregate([
+                { "$geoNear": {
+                    "near": point,
+                    "spherical": true,
+                    "distanceField": "distance"
+                  }},
+                  { "$redact": {
+                    "$cond": {
+                      "if": { "$lte": [ "$distance", "$nearestRadius" ] },
+                      "then": "$$KEEP",
+                      "else": "$$PRUNE"
+                    }
+                  }},
+                  {$limit: 1}
+            ])
+            .then((postcode: IPostCode[]) => {
+                if(postcode.length > 0) resolve(postcode[0]);
+                resolve(null)
+            })
+            .catch(err => reject(err));
+        })
+
+    }
+
+
+    /**
+     * @description find a postcode by id and insert the specified point
+     * @param {string} id 
+     * @param {IPoint} point 
+     * @returns {Promise<IPostCode | null>} return the PostCode with the new point if PostCode exist or null
+     * @memberof PostCodeRepositoy
+     */
+    insertPointByPostCodeID(id: string, point: IPoint): Promise<IPostCode | null> {
+        return new Promise<IPostCode | null>((resolve, reject) => {
+            PostCode.findByIdAndUpdate(id, {
+                $push: {
+                    points: point
                 }
             })
             .then((postcode: IPostCode | null) => resolve(postcode))
             .catch(err => reject(err));
-        });
-
+        })
+        
     }
 
 }
