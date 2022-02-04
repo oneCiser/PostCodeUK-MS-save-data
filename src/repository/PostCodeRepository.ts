@@ -1,5 +1,6 @@
 
 import {IPostCode} from '../interfaces';
+import {PostCode} from '../models';
 /**
  *
  * The PostCode repository 
@@ -26,6 +27,14 @@ class PostCodeRepositoy {
                 reject(error);
             }
         });
+    }
+
+    getById(id: string): Promise<IPostCode | null> {
+        return new Promise<IPostCode | null>((resolve, reject) => {
+            PostCode.findById(id)
+                .then((postcode: IPostCode | null) => resolve(postcode))
+                .catch(err => reject(err));
+        })
     }
 
 }
