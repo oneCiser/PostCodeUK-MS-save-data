@@ -56,7 +56,7 @@ class PostCodeRepositoy {
     }
 
     /**
-     * @description find nearest a postcode by point in a distance radius lest or equal to nearestRadius
+     * @description find nearest postcode by point in a distance radius lest or equal to nearestRadius
      * @param {IPoint} point point to find
      * @returns {Promise<IPostCode | null>} return a PostCode if exist or null
      * @memberof PostCodeRepositoy
@@ -81,7 +81,7 @@ class PostCodeRepositoy {
             ])
             .then((postcode: IPostCode[]) => {
                 if(postcode.length > 0) resolve(postcode[0]);
-                resolve(null)
+                else{resolve(null);}
             })
             .catch(err => reject(err));
         })

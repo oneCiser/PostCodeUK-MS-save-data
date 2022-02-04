@@ -1,4 +1,4 @@
-import fs from "fs"
+
 
 /**
  * 
@@ -8,7 +8,8 @@ import fs from "fs"
  * @returns {object} - The json object
  * @throws {Error} - If the csv file is not valid, indicating the error and line number
  */
-export const csv2json = (file: string, sep: string = ",", header: boolean = true, headers:string[] = []) => {
+export const csv2json = (file: string, sep: string = ",", header: boolean = true, headers:string[] = []): [] => {
+    const result = [];
     try {
         const newLine = /\r?\n/;
         const lines = file.split(newLine);
@@ -19,7 +20,7 @@ export const csv2json = (file: string, sep: string = ",", header: boolean = true
             startLine = 1;
         }
         
-        const result = [];
+        
         for (let i = startLine; i < lines.length; i++) {
             const obj: Record<string,any> = {};
             const currentline = lines[i].split(sep);
@@ -38,6 +39,8 @@ export const csv2json = (file: string, sep: string = ",", header: boolean = true
         }
         
     }
+
+    return result;
 
 }
 
