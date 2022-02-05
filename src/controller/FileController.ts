@@ -5,6 +5,7 @@ import { IPoint } from 'interfaces';
 import { HttpException } from '../exceptions';
 import {csv2json} from '../utils';
 import { PostCodeService } from '../services';
+import axios from 'axios';
 
 /**
  *
@@ -15,7 +16,7 @@ import { PostCodeService } from '../services';
 class FileController {
   /**
    *
-   * Upload CSV of postodes
+   * Upload CSV of postodes a save the points with the postcode
    * @static
    * @param {Request} req - The request
    * @param {Response} res - The response
@@ -35,7 +36,10 @@ class FileController {
         }
         const postcode = await PostCodeService.findNearestPostCodeByPoint(pointObj);
         if(postcode) {
-          await PostCodeService.insertPointByPostCodeID(postcode._id, pointObj);
+          PostCodeService.insertPointByPostCodeID(postcode._id, pointObj);
+        }
+        else{
+          
         }
       })
       res.json({

@@ -8,7 +8,7 @@
  * @returns {object} - The json object
  * @throws {Error} - If the csv file is not valid, indicating the error and line number
  */
-export const csv2json = (file: string, sep: string = ",", header: boolean = true, headers:string[] = []): [] => {
+export const csv2json = (file: string, sep: string = ",", header: boolean = true, headers:string[] = []): any => {
     const result = [];
     try {
         const newLine = /\r?\n/;
