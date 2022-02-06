@@ -7,13 +7,13 @@ import {PostCode} from '../models';
  * @category Repositorys
  * @class PostCodeRepository
  */
-class PostCodeRepositoy {
+class PostCodeRepository {
 
     /**
      * @description create a new postcode
      * @param {IPostCode} postcode 
      * @returns {Promise<IPostCode>} a create PostCode
-     * @memberof PostCodeRepositoy
+     * @memberof PostCodeRepository
      */
     create(postcode: IPostCode): Promise<IPostCode> {
         return new Promise<IPostCode>((resolve, reject) => {
@@ -28,12 +28,13 @@ class PostCodeRepositoy {
      * @description update a postcode
      * @param {IPostCode} postcode 
      * @returns {Promise<IPostCode>} a update PostCode
-     * @memberof PostCodeRepositoy
+     * @memberof PostCodeRepository
      */
     async update(postcode: IPostCode): Promise<IPostCode> {
         return new Promise<IPostCode>(async (resolve, reject) => {
             try {
-                if(postcode._id) await postcode.update();
+                const { _id, ...rest } = postcode;
+                if(postcode._id) await PostCode.findByIdAndUpdate(postcode._id, rest);
                 resolve(postcode);
             } catch (error) {
                 reject(error);
@@ -46,7 +47,7 @@ class PostCodeRepositoy {
      * @description find a postcode by id
      * @param {string} id - The id to find
      * @returns {Promise<IPostCode | null>} return a PostCode if exist or null
-     * @memberof PostCodeRepositoy
+     * @memberof PostCodeRepository
      */
     getById(id: string): Promise<IPostCode | null> {
         return new Promise<IPostCode | null>((resolve, reject) => {
@@ -60,7 +61,7 @@ class PostCodeRepositoy {
      * @description find nearest postcode by point in a distance radius lest or equal to nearestRadius
      * @param {IPoint} point point to find
      * @returns {Promise<IPostCode | null>} return a PostCode if exist or null
-     * @memberof PostCodeRepositoy
+     * @memberof PostCodeRepository
      */
     findNearestPostCodeByPoint(point: IPoint): Promise<IPostCode | null> {
 
@@ -95,7 +96,7 @@ class PostCodeRepositoy {
      * @param {string} id 
      * @param {IPoint} point 
      * @returns {Promise<IPostCode | null>} return the PostCode with the new point if PostCode exist or null
-     * @memberof PostCodeRepositoy
+     * @memberof PostCodeRepository
      */
     insertPointByPostCodeID(id: string, point: IPoint): Promise<IPostCode | null> {
         return new Promise<IPostCode | null>((resolve, reject) => {
@@ -112,4 +113,4 @@ class PostCodeRepositoy {
 
 }
 
-export default new PostCodeRepositoy();
+export default new PostCodeRepository();
