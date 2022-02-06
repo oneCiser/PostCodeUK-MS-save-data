@@ -7,7 +7,7 @@
     "test": "jest --watchAll --detectOpenHandles",
     "tsc": "tsc --watch",
     "dev": "cross-env NODE_ENV=development nodemon dist/src/app.js",
-    "build": "tsc",
+    "build": "npx tsc",
     "start": "npm run build && cross-env NODE_ENV=production node dist/src/app.js",
     "jsdoc": "jsdoc -c jsdoc.json",
     "lint": "eslint --ext .ts",
