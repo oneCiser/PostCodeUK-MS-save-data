@@ -1,11 +1,10 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable class-methods-use-this */
 import { NextFunction, Response, Request } from 'express';
-import { IPoint } from 'interfaces';
+import { IPoint, IPostCode, IResponseAPI } from '../interfaces';
 import { HttpException } from '../exceptions';
-import {csv2json} from '../utils';
-import { PostCodeService } from '../services';
-import axios from 'axios';
+import {csv2json, distance} from '../utils';
+import { PostCodeService, APIConsumeServices } from '../services';
 
 /**
  *
@@ -39,7 +38,17 @@ class FileController {
           PostCodeService.insertPointByPostCodeID(postcode._id, pointObj);
         }
         else{
-          
+          const responseAPI = await APIConsumeServices.getPostCodeByPoint(pointObj);
+          if(!responseAPI) throw new HttpException(400, 'Bad request');
+
+          const {postcode, nearest} = responseAPI;
+          const radiusDistance = distance(postcode.location, nearest.location);
+          postcode.nearestRadius = radiusDistance;
+          nearest.nearestRadius = radiusDistance;
+          postcode.points = [pointObj];
+          PostCodeService.create(postcode);
+
+        
         }
       })
       res.json({
