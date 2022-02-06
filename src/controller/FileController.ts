@@ -29,7 +29,8 @@ class FileController {
       const fileString = req.file.buffer.toString();
       const jsonFile = csv2json(fileString);
       let result: IPostCode[] = [];
-      jsonFile.forEach(async (point: {lat:number, lon:number}) => {
+      for (let index = 0; index < jsonFile.length; index++) {
+        const point = jsonFile[index];
         const pointObj: IPoint = {
           type: 'Point',
           coordinates: [point.lon, point.lat]
@@ -68,10 +69,10 @@ class FileController {
 
         
         }
-      })
+      }
       res.json({
         status: 200,
-        resukt: result
+        result
       });
     } catch (error: any) {
       return next(new HttpException(error.status || 500, error.message));
