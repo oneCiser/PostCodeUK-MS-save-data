@@ -1,8 +1,8 @@
-import IPostCode from './IPostCode';
+
 
 interface IResponseAPI {
-    postcode: IPostCode;
-    nearest: IPostCode;
+    postcode: any;
+    nearest: any;
 }
 
 export default IResponseAPI;

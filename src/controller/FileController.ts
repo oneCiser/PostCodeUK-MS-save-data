@@ -42,11 +42,24 @@ class FileController {
           if(!responseAPI) throw new HttpException(400, 'Bad request');
 
           const {postcode, nearest} = responseAPI;
-          const radiusDistance = distance(postcode.location, nearest.location);
-          postcode.nearestRadius = radiusDistance;
-          nearest.nearestRadius = radiusDistance;
+          const postcodeLocation: IPoint = {
+            type: 'Point',
+            coordinates: [postcode.longitude, postcode.latitude]
+          }
+          if(nearest){
+            const nearestLocation: IPoint = {
+              type: 'Point',
+              coordinates: [nearest.longitude, nearest.latitude]
+            }
+            const radiusDistance = distance(postcodeLocation, nearestLocation);
+            postcode.nearestRadius = radiusDistance;
+            nearest.nearestRadius = radiusDistance;
+          }
+
+
           postcode.points = [pointObj];
-          PostCodeService.create(postcode);
+          
+          await PostCodeService.create(postcode);
 
         
         }

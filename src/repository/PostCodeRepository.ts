@@ -17,7 +17,8 @@ class PostCodeRepositoy {
      */
     create(postcode: IPostCode): Promise<IPostCode> {
         return new Promise<IPostCode>((resolve, reject) => {
-            postcode.save()
+            const newPostCode = new PostCode(postcode);
+            newPostCode.save()
                 .then((postcode: IPostCode) => resolve(postcode))
                 .catch(err => reject(err))
         })

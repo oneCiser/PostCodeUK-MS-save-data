@@ -1,10 +1,13 @@
 import Server from './server/Server';
 import './config/dotenv';
 import { logger } from './utils';
+import Database from './config/database';
 
 const PORT: number = process.env.PORT ? parseInt(process.env.PORT) : 3000;
 const server: Server = Server.init(PORT);
 
+// Connect to database
+Database.connect();
 
 
 // START
