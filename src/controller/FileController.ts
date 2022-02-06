@@ -28,6 +28,7 @@ class FileController {
       if(!req.file) throw new HttpException(400, 'No file uploaded');
       const fileString = req.file.buffer.toString();
       const jsonFile = csv2json(fileString);
+      let result: IPostCode[] = [];
       jsonFile.forEach(async (point: {lat:number, lon:number}) => {
         const pointObj: IPoint = {
           type: 'Point',
@@ -35,7 +36,9 @@ class FileController {
         }
         const postcode = await PostCodeService.findNearestPostCodeByPoint(pointObj);
         if(postcode) {
-          PostCodeService.insertPointByPostCodeID(postcode._id, pointObj);
+          const pc = await PostCodeService.insertPointByPostCodeID(postcode._id, pointObj);
+          if(pc) result.push(pc);
+          
         }
         else{
           const responseAPI = await APIConsumeServices.getPostCodeByPoint(pointObj);
@@ -60,13 +63,15 @@ class FileController {
 
           postcode.points = [pointObj];
           
-          await PostCodeService.create(postcode);
+          const pc = await PostCodeService.create(postcode);
+          result.push(pc);
 
         
         }
       })
       res.json({
-        status: 200
+        status: 200,
+        resukt: result
       });
     } catch (error: any) {
       return next(new HttpException(error.status || 500, error.message));
