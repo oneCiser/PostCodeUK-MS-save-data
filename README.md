@@ -40,5 +40,16 @@ Run the server and update changes
 - **.env** for server deployment
 - **.env.dev** in the development process
 
+## CSV file
+The structure of the **CSV** file must be as follows.
+
+
+| lat         | lon         |
+| ----------- | ----------- |
+| number      | number      |
+
+with **,** separator
+
+
 ## Author
 - [@oneCiser](https://github.com/oneCiser)
