@@ -46,6 +46,7 @@ class FileController {
             type: 'Point',
             coordinates: [postcode.longitude, postcode.latitude]
           }
+          postcode.location = postcodeLocation;
           if(nearest){
             const nearestLocation: IPoint = {
               type: 'Point',
